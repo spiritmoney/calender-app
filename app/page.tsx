@@ -10,28 +10,25 @@ const Page = () => {
       navigator.userAgent
     );
 
-    // Ensure base URL uses HTTPS
-    let baseUrl = window.location.origin;
-    if (!baseUrl.startsWith("https")) {
-      baseUrl = baseUrl.replace("http:", "https:");
-    }
+    // Google Drive direct download link
+    const googleDriveDownloadUrl =
+      "https://drive.google.com/uc?export=download&id=170IPTjEFiDyY_0KgXGl4FoPpzhz05lA1";
+    const webcalUrl = googleDriveDownloadUrl.replace(/^https?/, "webcal");
 
-    const downloadUrl = `${baseUrl}/Loveworld_Programs_Calendar.ics`;
-    const webcalUrl = downloadUrl.replace(/^https?/, "webcal");
-
-    // Try to open the calendar in webcal protocol for iOS and compatible systems
+    // Attempt to open with webcal protocol for compatible systems
     const webcalWindow = window.open(webcalUrl, "_blank");
 
-    // Fallback: If webcal is not supported, or if on mobile, trigger a download
+    // Fallback: Trigger direct download if webcal is unsupported or if on mobile
     if (!webcalWindow || isMobile) {
       const link = document.createElement("a");
-      link.href = downloadUrl;
+      link.href = googleDriveDownloadUrl;
       link.setAttribute("download", "Loveworld_Programs_Calendar.ics");
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
     }
   };
+
 
 
 
