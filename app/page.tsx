@@ -6,22 +6,34 @@ import Footer from "./components/Footer";
 
 const Page = () => {
   const handleImportCalendar = () => {
-    // Convert http(s) to webcal protocol for direct calendar import
-    const baseUrl = window.location.origin.replace(/^https?:/, 'webcal:');
-    const calendarUrl = `${baseUrl}/Loveworld_Programs_Calendar.ics`;
-    const downloadUrl = `${window.location.origin}/Loveworld_Programs_Calendar.ics`;
-
-    // Try webcal protocol first
-    const webcalSupported = window.open(calendarUrl);
+    // Check if user is on mobile device
+    const isMobile = /Android|webOS|iPhone|iPad|iPod/i.test(navigator.userAgent);
     
-    // If webcal failed, fallback to download
-    if (!webcalSupported) {
+    const baseUrl = window.location.origin;
+    const downloadUrl = `${baseUrl}/Loveworld_Programs_Calendar.ics`;
+
+    if (isMobile) {
+      // On mobile, directly trigger download
       const link = document.createElement("a");
       link.href = downloadUrl;
       link.setAttribute("download", "Loveworld_Programs_Calendar.ics");
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
+    } else {
+      // On desktop, try webcal first
+      const webcalUrl = `${baseUrl.replace(/^https?:/, 'webcal:')}/Loveworld_Programs_Calendar.ics`;
+      const webcalSupported = window.open(webcalUrl);
+      
+      // Fallback to download if webcal fails
+      if (!webcalSupported) {
+        const link = document.createElement("a");
+        link.href = downloadUrl;
+        link.setAttribute("download", "Loveworld_Programs_Calendar.ics");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
     }
   };
 
