@@ -5,6 +5,7 @@ import { Fira_Code } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "./components/theme-provider";
 import Header from "./components/Header";
+import Script from "next/script";
 
 // const geistSans = localFont({
 //   src: "./fonts/GeistVF.woff",
@@ -48,6 +49,21 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        {/* Add Google Analytics */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-QCYM2VJWSN"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-QCYM2VJWSN');
+          `}
+        </Script>
+      </head>
       <body className={firaCode.className}>
         <ThemeProvider
           attribute="class"
