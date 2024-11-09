@@ -6,20 +6,20 @@ import Footer from "./components/Footer";
 
 const Page = () => {
   const handleImportCalendar = () => {
-    const isMobile = /Android|webOS|iPhone|iPad|iPod/i.test(
-      navigator.userAgent
-    );
+    // Check if the user is on a mobile device (Android or iOS)
+    const isAndroid = /Android/i.test(navigator.userAgent);
+    const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
 
     // Google Drive direct download link
     const googleDriveDownloadUrl =
       "https://drive.google.com/uc?export=download&id=170IPTjEFiDyY_0KgXGl4FoPpzhz05lA1";
     const webcalUrl = googleDriveDownloadUrl.replace(/^https?/, "webcal");
 
-    // Attempt to open with webcal protocol for compatible systems
-    const webcalWindow = window.open(webcalUrl, "_blank");
-
-    // Fallback: Trigger direct download if webcal is unsupported or if on mobile
-    if (!webcalWindow || isMobile) {
+    if (isIOS) {
+      // Attempt to open with webcal protocol for iOS devices
+      window.open(webcalUrl, "_blank");
+    } else {
+      // For Android (and as a fallback for desktop), trigger a direct download
       const link = document.createElement("a");
       link.href = googleDriveDownloadUrl;
       link.setAttribute("download", "Loveworld_Programs_Calendar.ics");
@@ -28,6 +28,7 @@ const Page = () => {
       document.body.removeChild(link);
     }
   };
+
 
 
 
