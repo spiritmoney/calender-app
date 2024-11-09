@@ -6,36 +6,28 @@ import Footer from "./components/Footer";
 
 const Page = () => {
   const handleImportCalendar = () => {
-    // Check if user is on mobile device
-    const isMobile = /Android|webOS|iPhone|iPad|iPod/i.test(navigator.userAgent);
-    
+    const isMobile = /Android|webOS|iPhone|iPad|iPod/i.test(
+      navigator.userAgent
+    );
     const baseUrl = window.location.origin;
     const downloadUrl = `${baseUrl}/Loveworld_Programs_Calendar.ics`;
+    const webcalUrl = `${baseUrl.replace(
+      /^https?/,
+      "webcal"
+    )}/Loveworld_Programs_Calendar.ics`;
 
-    if (isMobile) {
-      // On mobile, directly trigger download
-      const link = document.createElement("a");
-      link.href = downloadUrl;
-      link.setAttribute("download", "Loveworld_Programs_Calendar.ics");
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    } else {
-      // On desktop, try webcal first
-      const webcalUrl = `${baseUrl.replace(/^https?:/, 'webcal:')}/Loveworld_Programs_Calendar.ics`;
-      const webcalSupported = window.open(webcalUrl);
-      
-      // Fallback to download if webcal fails
-      if (!webcalSupported) {
-        const link = document.createElement("a");
-        link.href = downloadUrl;
-        link.setAttribute("download", "Loveworld_Programs_Calendar.ics");
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      }
-    }
+    // Attempt to open calendar with webcal protocol first (mainly supported on iOS and macOS)
+    window.open(webcalUrl, "_blank");
+
+    // Fallback for non-supported `webcal` or desktop browsers
+    const link = document.createElement("a");
+    link.href = downloadUrl;
+    link.setAttribute("download", "Loveworld_Programs_Calendar.ics");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
+
 
   return (
     <main className="min-h-screen flex flex-col bg-background text-foreground">
